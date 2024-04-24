@@ -1,24 +1,28 @@
 #!/usr/bin/python3
 from bottle import route, run, template, request, response
+from create_certificate import create_certificate
 
 @route('/creation', method='POST')
-def création_attestation():
-    contenu_identité = request.forms.get('identite')
-    contenu_intitulé_certification = request.forms.get('intitule_certif')
-    print('nom prénom :', contenu_identité, ' intitulé de la certification :',
-    contenu_intitulé_certification)
+def creation_attestation():
+    # Get the data from the form
+    contenu_identite = request.forms.get('identite')
+    contenu_intitule_certification = request.forms.get('intitule_certif')
+
+    print('nom prénom :', contenu_identite, 
+          ' intitulé de la certification :', contenu_intitule_certification)
+    create_certificate(contenu_identite, contenu_intitule_certification)
     response.set_header('Content-type', 'text/plain')
     return "ok!"
 
 @route('/verification', method='POST')
-def vérification_attestation():
+def verification_attestation():
     contenu_image = request.files.get('image')
     contenu_image.save('attestation_a_verifier.png',overwrite=True)
     response.set_header('Content-type', 'text/plain')
     return "ok!"
 
 @route('/fond')
-def récupérer_fond():
+def recuperer_fond():
     response.set_header('Content-type', 'image/png')
     descripteur_fichier = open('fond_attestation.png','rb')
     contenu_fichier = descripteur_fichier.read()
