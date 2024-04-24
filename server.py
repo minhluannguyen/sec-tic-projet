@@ -10,9 +10,9 @@ def creation_attestation():
 
     print('nom prénom :', contenu_identite, 
           ' intitulé de la certification :', contenu_intitule_certification)
-    create_certificate(contenu_identite, contenu_intitule_certification)
+    res = create_certificate(contenu_identite, contenu_intitule_certification)
     response.set_header('Content-type', 'text/plain')
-    return "ok!"
+    return res
 
 @route('/verification', method='POST')
 def verification_attestation():

@@ -1,5 +1,5 @@
 # Request recovery of the certificate
-curl -X POST -d 'identite=toto' -d 'intitule_certif=SecuTIC' http://localhost:8080/creation
+curl -X POST -d 'identite=Nguyen Minh Luan' -d 'intitule_certif=SecuTIC' http://localhost:8080/creation
 
 # Request verification of the certificate
 # curl -v -F image=@fond_attestation.png http://localhost:8080/verification
