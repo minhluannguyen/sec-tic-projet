@@ -24,7 +24,7 @@ def verification_attestation():
 @route('/fond')
 def recuperer_fond():
     response.set_header('Content-type', 'image/png')
-    descripteur_fichier = open('fond_attestation.png','rb')
+    descripteur_fichier = open('tmp/attestation.png', 'rb')
     contenu_fichier = descripteur_fichier.read()
     descripteur_fichier.close()
     return contenu_fichier
