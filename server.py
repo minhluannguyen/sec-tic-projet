@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from bottle import route, run, template, request, response
 from create_certificate import create_certificate
+from verify_certificate import verify_certificate 
 
 @route('/creation', method='POST')
 def creation_attestation():
@@ -18,8 +19,9 @@ def creation_attestation():
 def verification_attestation():
     contenu_image = request.files.get('image')
     contenu_image.save('attestation_a_verifier.png',overwrite=True)
+    res = verify_certificate(contenu_image)
     response.set_header('Content-type', 'text/plain')
-    return "ok!"
+    return res
 
 @route('/fond')
 def recuperer_fond():
