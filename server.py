@@ -18,7 +18,7 @@ def creation_attestation():
 @route('/verification', method='POST')
 def verification_attestation():
     contenu_image = request.files.get('image')
-    contenu_image.save('attestation_a_verifier.png',overwrite=True)
+    contenu_image.save('tmp/attestation_a_verifier.png',overwrite=True)
     res = verify_certificate()
     response.set_header('Content-type', 'text/plain')
     return res

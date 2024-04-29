@@ -10,9 +10,7 @@ from PIL import Image
 # Recover information from the certificate image
 def recover_info_from_image():
     try:
-        img = Image.open("attestation_a_verifier.png")
-
-        # Recover full information (including timestamp)
+        img = Image.open("tmp/attestation_a_verifier.png")
         full_info  = recuperer(img,7392)
         print(full_info)
         info = full_info[:64]
@@ -26,7 +24,7 @@ def recover_info_from_image():
         f.write(timeStamp)
         f.close()
 
-        f = open("tmp/info.txt", "w")
+        f = open("tmp/verify_info.txt", "w")
         f.write(info)
         f.close()
 
@@ -37,24 +35,19 @@ def recover_info_from_image():
 
 # Extract QR code from the certificate image
 def get_qrcode():
-    attestation = Image.open("tmp/attestation.png")
-
-    # Crop image to get the QR code 
+    attestation = Image.open("tmp/attestation_a_verifier.png")
     qr = attestation.crop((1418,934, 1418+200, 934+200))
-    qr.save("tmp/qrcode.png", scale=3)
+    qr.save("tmp/verify_qrcode.png", format="png")
     print("Get QR code successfully!")
 
 # Recover data from the QR code
 def recover_data_from_qrcode():
-    img = Image.open("tmp/qrcode.png")
-
-    # Decode the QR code
-    data = zbarlight.scan_codes(['qrcode'],img)
+    img = Image.open("tmp/verify_qrcode.png")
+    data = zbarlight.scan_codes(['qrcode'], img)
     print(data)
 
     # Decode the base64-encoded data
     data = base64.b64decode(data[0])
-    print(data)
 
     # Write the recovered data to a file
     f = open("tmp/verify_sig_qrcode.sig","wb")
@@ -100,8 +93,7 @@ def verify_timestamp(timestamp):
         return False
 
 def verify_signature(signature):
-    # Verify the signature
-    process = subprocess.Popen(["openssl dgst -verify CA/ecc.ca.pubkey.pem -signature {} tmp/info.txt".format(signature)],
+    process = subprocess.Popen(["openssl dgst -verify CA/ecc.ca.pub.pem -signature {} tmp/info.hash".format(signature)],
         shell=True,
         stdout=subprocess.PIPE)
 
@@ -131,7 +123,3 @@ def verify_certificate():
         return "Verify certificate success!"
     else:
         return "Verify certificate failed!"
-
-
-
-
