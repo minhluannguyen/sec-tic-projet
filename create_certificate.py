@@ -26,7 +26,7 @@ def create_signature(info):
 
 
     # Hash the info
-    hash_process = subprocess.Popen("openssl dgst -sha256 tmp/info.txt > tmp/info.hash",
+    hash_process = subprocess.Popen("openssl dgst -sha256 -binary tmp/info.txt > tmp/info.hash",
         shell=True,
         stdout=subprocess.PIPE)
     

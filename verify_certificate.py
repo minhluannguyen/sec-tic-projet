@@ -78,7 +78,7 @@ def verify_timestamp(timestamp):
         return False
 
     # Verify the timestamp
-    rsq_process = subprocess.Popen(["openssl ts -verify -in {} -queryfile ./tmp/ts/ts_query_verify.tsq -CAfile .CA/cacert.pem -untrusted .CA/tsa.crt".format(timestamp)],
+    rsq_process = subprocess.Popen(["openssl ts -verify -in {} -queryfile ./tmp/ts/ts_query_verify.tsq -CAfile ./CA/cacert.pem -untrusted ./CA/tsa.crt".format(timestamp)],
         shell=True,
         stdout=subprocess.PIPE)
     
@@ -95,7 +95,7 @@ def verify_timestamp(timestamp):
 def verify_signature(signature):
 
     # Hash the info for verification
-    hash_process = subprocess.Popen("openssl dgst -sha256 tmp/verify_info.txt > tmp/verify_info.hash",
+    hash_process = subprocess.Popen("openssl dgst -sha256 -binary tmp/verify_info.txt > tmp/verify_info.hash",
         shell=True,
         stdout=subprocess.PIPE)
     
@@ -105,6 +105,7 @@ def verify_signature(signature):
         print(error)
         return False
     
+    # Verify the signature
     process = subprocess.Popen(["openssl dgst -verify CA/ecc.ca.pub.pem -signature {} tmp/verify_info.hash".format(signature)],
         shell=True,
         stdout=subprocess.PIPE)
@@ -113,10 +114,10 @@ def verify_signature(signature):
 
     # Check if signature verification was successful
     if process.returncode == 0 and output.decode() == 'Verified OK\n':
-        print("Verify signature  success!")
+        print("Verify signature success!")
         return True
     else:
-        print("Verify signature  failed!")
+        print("Verify signature failed!")
         return False
 
 # Verify the entire certificate
@@ -131,7 +132,7 @@ def verify_certificate():
     recover_data_from_qrcode()
 
     # Verify the signature and timestamp
-    if (verify_signature("tmp/verify_sig_qrcode.sig")== True) and (verify_timestamp("tmp/ts/verify_timestamp.tsr") == True):
+    if (verify_signature("tmp/verify_sig_qrcode.sig") == True) and (verify_timestamp("tmp/ts/verify_timestamp.tsr") == True):
         return "Verify certificate success!"
     else:
         return "Verify certificate failed!"
