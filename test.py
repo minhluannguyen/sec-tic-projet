@@ -37,14 +37,14 @@
 
 # print("Image created!")
 
-from steganographie import recuperer, cacher
+# from steganographie import recuperer, cacher
 
-from PIL import Image
+# from PIL import Image
 
-image = Image.open("tmp/attestation.png")
-a = recuperer(image, 7392)
-print(a[:64])
-print(a[64:])
+# image = Image.open("tmp/attestation.png")
+# a = recuperer(image, 7392)
+# print(a[:64])
+# print(a[64:])
 # import os
 # if not os.path.exists('./tmp/ts'):
 #     os.makedirs('./tmp/ts')
@@ -53,4 +53,26 @@ print(a[64:])
 #     f.close()
 
 # f = open('./tmp/ts/ts_query.tsq', 'a')
+# f.close()
+
+# import base64
+
+# f = open("tmp/info.sig", "rb")
+# info_sig = f.read()
+# f.close()
+# print(info_sig)
+# sig64 = base64.b64encode(info_sig).decode()
+# print(sig64)
+# print(base64.b64decode(sig64).decode())
+
+# import zbarlight
+# from PIL import Image
+
+# img = Image.open("tmp/verify_qrcode.png")
+# data = zbarlight.scan_codes(['qrcode'], img)
+# print(data[0])
+# data = data[0]
+# data = b"alo123"
+# f = open("tmp/hehe.sig","wb")
+# f.write(data)
 # f.close()

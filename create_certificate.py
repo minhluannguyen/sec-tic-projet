@@ -8,7 +8,6 @@ import os
 from steganographie import cacher
 from PIL import Image
 
-CA_KEY_PATH = "CA/ecc.ca.key.pem"
 IMGBUN_API_KEY = "252d562bac2de5b2bda9cd369ce294b3"
 
 def create_signature(info):
@@ -27,7 +26,7 @@ def create_signature(info):
 
 
     # Hash the info
-    hash_process = subprocess.Popen("openssl dgst -sha256 tmp/info.txt > tmp/info.hash",
+    hash_process = subprocess.Popen("openssl dgst -sha256 -binary tmp/info.txt > tmp/info.hash",
         shell=True,
         stdout=subprocess.PIPE)
     
@@ -39,7 +38,7 @@ def create_signature(info):
     
     # Sign the hash with the CA's private key
     signProcess = subprocess.Popen("openssl dgst -sha256 -sign {} -out tmp/info.sig tmp/info.hash"
-            .format(CA_KEY_PATH),
+            .format("CA/ecc.ca.key.pem"),
         shell=True, stdout=subprocess.PIPE)
     (output, error) = signProcess.communicate()
     if signProcess.returncode != 0:
@@ -70,18 +69,6 @@ def create_image(identity):
         print("Error creating image")
         print(error)
         return False
-    
-    #'curl -o texte.png "http://chart.apis.google.com/chart" --data-urlencode "chst=d_text_outline" --data-urlencode "chld=000000|56|h|FFFFFF|b|{}"'
-    # Return result is a JSON object, so we need to parse it
-    # and download the image
-    # res = json.loads(output)
-
-    # process = subprocess.Popen("curl -o tmp/texte.png {}".format(res['direct_link']), shell=True, stdout=subprocess.PIPE)
-    # (output, error) = process.communicate()
-    # if process.returncode != 0:
-    #     print("Error creating image")
-    #     print(error)
-    #     return False
     
     print("Image created!")
     return True
