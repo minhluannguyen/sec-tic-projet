@@ -77,6 +77,18 @@ def verify_timestamp(timestamp):
         print("Create timestamp-query failed!")
         return False
 
+    # Hash the info for verification
+    hash_process = subprocess.Popen("openssl dgst -sha256 tmp/verify_info.txt > tmp/verify_info.hash",
+        shell=True,
+        stdout=subprocess.PIPE)
+    
+    (output, error) = hash_process.communicate()
+    if hash_process.returncode != 0:
+        print("Error hashing the info")
+        print(error)
+        return False
+
+
     # Verify the timestamp
     rsq_process = subprocess.Popen(["openssl ts -verify -in {} -queryfile ./tmp/ts/ts_query_verify.tsq -CAfile .CA/cacert.pem -untrusted .CA/tsa.crt".format(timestamp)],
         shell=True,
@@ -93,7 +105,7 @@ def verify_timestamp(timestamp):
         return False
 
 def verify_signature(signature):
-    process = subprocess.Popen(["openssl dgst -verify CA/ecc.ca.pub.pem -signature {} tmp/info.hash".format(signature)],
+    process = subprocess.Popen(["openssl dgst -verify CA/ecc.ca.pub.pem -signature {} tmp/verify_info.hash".format(signature)],
         shell=True,
         stdout=subprocess.PIPE)
 
