@@ -182,8 +182,8 @@ def create_certificate(identity, certif_title):
         f = open("tmp/info.sig", "rb")
         info_sig = f.read()
         f.close()
+        print(base64.b64encode(info_sig).decode())
         create_qr_code(base64.b64encode(info_sig).decode())
-        create_qr_code(info)
 
         # Combine the images
         if not combine_images():

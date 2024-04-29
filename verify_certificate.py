@@ -34,15 +34,14 @@ def recover_info_from_image():
 def get_qrcode():
     attestation = Image.open("tmp/attestation_a_verifier.png")
     qr = attestation.crop((1418,934, 1418+200, 934+200))
-    qr.save("tmp/verify_qrcode.png", scale=3)
+    qr.save("tmp/verify_qrcode.png", format="png")
     print("Get QR code successfully!")
 
 def recover_data_from_qrcode():
     img = Image.open("tmp/verify_qrcode.png")
-    data = zbarlight.scan_codes(['qrcode'],img)
+    data = zbarlight.scan_codes(['qrcode'], img)
     print(data)
     data = base64.b64decode(data[0])
-    print(data)
 
     f = open("tmp/verify_sig_qrcode.sig","wb")
     f.write(data)
@@ -82,7 +81,7 @@ def verify_timestamp(timestamp):
         return False
 
 def verify_signature(signature):
-    process = subprocess.Popen(["openssl dgst -verify CA/ecc.ca.pubkey.pem -signature {} tmp/info.txt".format(signature)],
+    process = subprocess.Popen(["openssl dgst -verify CA/ecc.ca.pub.pem -signature {} tmp/info.hash".format(signature)],
         shell=True,
         stdout=subprocess.PIPE)
 
