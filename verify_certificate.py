@@ -9,20 +9,20 @@ from PIL import Image
 
 def recover_info_from_image():
     try:
-        img = Image.open("tmp/attestation.png")
+        img = Image.open("tmp/attestation_a_verifier.png")
         full_info  = recuperer(img,7392)
-        # print(full_info)
+        print(full_info)
         info = full_info[:64]
         timeStamp = full_info[64:]
-        # print(len(info))
+        print(len(info))
         timeStamp = base64.b64decode(timeStamp)
-        # print(len(timeStamp))
+        print(len(timeStamp))
 
         f = open("tmp/ts/verify_timestamp.tsr","wb")
         f.write(timeStamp)
         f.close()
 
-        f = open("tmp/info.txt", "w")
+        f = open("tmp/verify_info.txt", "w")
         f.write(info)
         f.close()
 
@@ -32,13 +32,13 @@ def recover_info_from_image():
         return "Error recovering info!"
 
 def get_qrcode():
-    attestation = Image.open("tmp/attestation.png")
+    attestation = Image.open("tmp/attestation_a_verifier.png")
     qr = attestation.crop((1418,934, 1418+200, 934+200))
-    qr.save("tmp/qrcode.png", scale=3)
+    qr.save("tmp/verify_qrcode.png", scale=3)
     print("Get QR code successfully!")
 
 def recover_data_from_qrcode():
-    img = Image.open("tmp/qrcode.png")
+    img = Image.open("tmp/verify_qrcode.png")
     data = zbarlight.scan_codes(['qrcode'],img)
     print(data)
     data = base64.b64decode(data[0])
@@ -102,7 +102,3 @@ def verify_certificate():
         return "Verify certificate success!"
     else:
         return "Verify certificate failed!"
-
-
-
-
