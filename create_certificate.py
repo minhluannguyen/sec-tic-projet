@@ -2,7 +2,6 @@ import subprocess
 import qrcode
 import urllib.parse
 import base64
-import json
 import os
 
 from steganographie import cacher
@@ -52,10 +51,7 @@ def create_signature(info):
 def create_image(identity):
 
     # Certificate titles
-    # texte_titre = "Attestation de réussite"
-    # texte_delivre = "délivrée à "
     texte_identite = identity
-    # texte_ligne = "Attestation de réussite délivrée à " + identity
 
     # Ensure the identity is 64 characters long by adding spaces
     texte_identite = identity.center(64)
@@ -192,9 +188,7 @@ def create_certificate(identity, certif_title):
         f.close()
 
         data =  info_data + base64.b64encode(tsr_data).decode()
-        # The info_data have the fixed length of 64 bytes, and the total length of the data is 64 + 7328 = 7392
-        # print(len(data))
-        # print(len(base64.b64encode(tsr_data).decode()))
+        # The info_data have the fixed length of 64 bytes, and the total length of the data is 64 + 7328 = 7392 bytes
         cacher(img, data)
         img.save("tmp/attestation.png")
 

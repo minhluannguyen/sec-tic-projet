@@ -1,5 +1,4 @@
 import subprocess
-import qrcode
 import base64
 import os
 import zbarlight
