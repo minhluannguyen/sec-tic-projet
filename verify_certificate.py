@@ -78,7 +78,7 @@ def verify_timestamp(timestamp):
         return False
 
     # Verify the timestamp
-    rsq_process = subprocess.Popen(["openssl ts -verify -in {} -queryfile ./tmp/ts/ts_query_verify.tsq -CAfile ./tmp/ts/cacert.pem -untrusted ./ts/tsa.crt".format(timestamp)],
+    rsq_process = subprocess.Popen(["openssl ts -verify -in {} -queryfile ./tmp/ts/ts_query_verify.tsq -CAfile ./tmp/ts/cacert.pem -untrusted ./tmp/ts/tsa.crt".format(timestamp)],
         shell=True,
         stdout=subprocess.PIPE)
     
@@ -119,7 +119,7 @@ def verify_certificate():
     recover_data_from_qrcode()
 
     # Verify the signature and timestamp
-    if (verify_signature("tmp/verify_sig_qrcode.sig")== True) and (verify_timestamp("tmp/verify_timestamp.tsr") == True):
+    if (verify_signature("tmp/verify_sig_qrcode.sig")== True) and (verify_timestamp("tmp/ts/verify_timestamp.tsr") == True):
         return "Verify certificate success!"
     else:
         return "Verify certificate failed!"

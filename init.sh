@@ -1,4 +1,3 @@
-
 # CA private key
 openssl ecparam -out ecc.ca.key.pem -name prime256v1 -genkey
 # CA certificate
@@ -13,3 +12,13 @@ openssl x509 -req -days 3650 -CA ecc.ca.cert.pem -CAkey ecc.ca.key.pem -CAcreate
 
 # CA public key
 openssl ec -in ecc.ca.key.pem -pubout -out ecc.ca.pub.pem
+
+if [[ ! -f "tmp/ts/tsa.crt" ]]
+then
+	wget -P tmp/ts https://freetsa.org/files/tsa.crt
+fi
+
+if [[ ! -f "tmp/ts/cacert.pem" ]]
+then
+	wget -P tmp/ts https://freetsa.org/files/cacert.pem 
+fi
