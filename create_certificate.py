@@ -37,7 +37,7 @@ def create_signature(info):
     
     # Sign the hash with the CA's private key
     signProcess = subprocess.Popen("openssl dgst -sha256 -sign {} -out tmp/info.sig tmp/info.hash"
-            .format("CA/ecc.ca.key.pem"),
+            .format("CA/ecc.ca.private.pem"),
         shell=True, stdout=subprocess.PIPE)
     (output, error) = signProcess.communicate()
     if signProcess.returncode != 0:
@@ -165,7 +165,6 @@ def create_certificate(identity, certif_title):
         f = open("tmp/info.sig", "rb")
         info_sig = f.read()
         f.close()
-        print(base64.b64encode(info_sig).decode())
         create_qr_code(base64.b64encode(info_sig).decode())
 
         # Combine the images
