@@ -37,7 +37,7 @@ def create_signature(info):
     
     # Sign the hash with the CA's private key
     signProcess = subprocess.Popen("openssl dgst -sha256 -sign {} -out tmp/info.sig tmp/info.hash"
-            .format("CA/ecc.ca.key.pem"),
+            .format("CA/ecc.ca.private.pem"),
         shell=True, stdout=subprocess.PIPE)
     (output, error) = signProcess.communicate()
     if signProcess.returncode != 0:

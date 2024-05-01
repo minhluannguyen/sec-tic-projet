@@ -11,13 +11,11 @@ def recover_info_from_image():
     try:
         img = Image.open("tmp/attestation_a_verifier.png")
         full_info  = recuperer(img,7392)
-        print(full_info)
         info = full_info[:64]
         timeStamp = full_info[64:]
-        print(len(info))
         timeStamp = base64.b64decode(timeStamp)
-        print(len(timeStamp))
 
+        print(info)
         # Write information and timestamp to files
         f = open("tmp/ts/verify_timestamp.tsr","wb")
         f.write(timeStamp)
@@ -43,7 +41,6 @@ def get_qrcode():
 def recover_data_from_qrcode():
     img = Image.open("tmp/verify_qrcode.png")
     data = zbarlight.scan_codes(['qrcode'], img)
-    print(data)
 
     # Decode the base64-encoded data
     data = base64.b64decode(data[0])
@@ -105,7 +102,7 @@ def verify_signature(signature):
         return False
     
     # Verify the signature
-    process = subprocess.Popen(["openssl dgst -verify CA/ecc.ca.pub.pem -signature {} tmp/verify_info.hash".format(signature)],
+    process = subprocess.Popen(["openssl dgst -verify CA/ecc.ca.public.pem -signature {} tmp/verify_info.hash".format(signature)],
         shell=True,
         stdout=subprocess.PIPE)
 
@@ -132,6 +129,6 @@ def verify_certificate():
 
     # Verify the signature and timestamp
     if (verify_signature("tmp/verify_sig_qrcode.sig") == True) and (verify_timestamp("tmp/ts/verify_timestamp.tsr") == True):
-        return "Verify certificate success!"
+        return "Verify certificate success!\n"
     else:
-        return "Verify certificate failed!"
+        return "Verify certificate failed!\n"
